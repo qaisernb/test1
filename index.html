@@ -176,13 +176,29 @@
       window.scrollTo(0, document.body.scrollHeight);
     };
 
+    // Replace these with your real AdPuzzle links
     const classroom1Link = "https://edpuzzle.com/assignments/68b1a7f9ddde8cb5f8362210/watch";
     const classroom2Link = "https://edpuzzle.com/assignments/68b1a7f9ddde8cb5f8362210/watch";
 
+    // Function to track user details to Google Sheets
+    function trackUserDetails(shopid, shopname, marketname, role) {
+      fetch("https://script.google.com/macros/s/AKfycbzLRysg-pKYgjJa30M51M0JfXrsGThOU1g4T709yAb8a9ilrSgZqEsrvGLers9dUF8w/exec", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          shopid, shopname, marketname, role,
+          timestamp: new Date().toISOString()
+        })
+      });
+    }
+
     document.getElementById("btn-employer").onclick = () => {
+      trackUserDetails(shop.shopid, shop.shopname, shop.marketname, "Employer");
       window.location.href = classroom1Link;
     };
+
     document.getElementById("btn-employee").onclick = () => {
+      trackUserDetails(shop.shopid, shop.shopname, shop.marketname, "Employee");
       window.location.href = classroom2Link;
     };
   </script>
