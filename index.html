@@ -146,6 +146,23 @@
       { shopid: 44346, shopname: "evergreen", marketname: "julena" }
     ];
 
+    // Replace with your Google Apps Script Web App URL
+    const SHEET_URL = "https://script.google.com/macros/s/AKfycbx4daJTOhTxC7XaUhWR93Y1dVHI1LeUM7z1lf2EQ6S-I7_i97pPy4jK978_YG8E789B/exec";
+
+    // Helper function: log to Google Sheets
+    function trackUserDetails(shopid, shopname, marketname, role) {
+      fetch(SHEET_URL, {
+        method: "POST",
+        mode: "no-cors", // bypass CORS
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          shopid, shopname, marketname, role,
+          timestamp: new Date().toISOString()
+        })
+      });
+      console.log("Logging:", shopid, shopname, marketname, role);
+    }
+
     const params = new URLSearchParams(window.location.search);
     const shopIdFromUrl = parseInt(params.get("shopid"));
     const shopDetails = document.getElementById("shop-details");
@@ -176,33 +193,17 @@
       window.scrollTo(0, document.body.scrollHeight);
     };
 
-    // Replace these with your real AdPuzzle links
     const classroom1Link = "https://edpuzzle.com/assignments/68b1a7f9ddde8cb5f8362210/watch";
     const classroom2Link = "https://edpuzzle.com/assignments/68b1a7f9ddde8cb5f8362210/watch";
 
-    // Function to track user details to Google Sheets
-    function trackUserDetails(role, shopid, shopname, marketname) {
-      fetch("https://script.google.com/macros/s/AKfycbzLRysg-pKYgjJa30M51M0JfXrsGThOU1g4T709yAb8a9ilrSgZqEsrvGLers9dUF8w/exec", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          role, shopid, shopname, marketname, 
-          timestamp: new Date().toISOString()
-        })
-      });
-    }
-
     document.getElementById("btn-employer").onclick = () => {
-      trackUserDetails("Employer", shop.shopid, shop.shopname, shop.marketname);
+      trackUserDetails(shop.shopid, shop.shopname, shop.marketname, "Employer");
       window.location.href = classroom1Link;
     };
-
     document.getElementById("btn-employee").onclick = () => {
-      trackUserDetails("Employee", shop.shopid, shop.shopname, shop.marketname);
+      trackUserDetails(shop.shopid, shop.shopname, shop.marketname, "Employee");
       window.location.href = classroom2Link;
     };
   </script>
 </body>
 </html>
-
-
