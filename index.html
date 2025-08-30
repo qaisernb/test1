@@ -43,13 +43,6 @@
       margin: 10px 0;
       line-height: 1.6;
     }
-    .card {
-      border: 1px solid #e0e0e0;
-      border-radius: 10px;
-      padding: 20px;
-      margin: 20px 0;
-      background: #fafafa;
-    }
     .password-box {
       background: #f0f7ff;
       border: 1px solid #007BFF;
@@ -73,21 +66,23 @@
       cursor: pointer;
       transition: background 0.3s ease;
     }
-    .btn:hover {
-      background: #0056b3;
+    .btn:hover { background: #0056b3; }
+    .btn-secondary { background: #555; }
+    .hidden { display: none; }
+    .card {
+      border: 1px solid #e0e0e0;
+      border-radius: 10px;
+      padding: 20px;
+      margin: 20px 0;
+      background: #fafafa;
     }
-    .btn-secondary {
-      background: #555;
-    }
-    .hidden {
-      display: none;
-    }
-    .img-placeholder {
+    input {
+      padding: 12px;
       width: 100%;
-      height: 180px;
-      background: url('https://source.unsplash.com/800x400/?business,training') center/cover no-repeat;
-      border-radius: 12px;
-      margin-bottom: 20px;
+      margin: 10px 0;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      font-size: 1rem;
     }
   </style>
 </head>
@@ -99,35 +94,45 @@
     <p>Ensuring Respectful Workplaces</p>
   </div>
 
-  <!-- Content -->
+  <!-- Main Content -->
   <div class="container">
 
-    <!-- Decorative image -->
-    <div class="img-placeholder"></div>
-
+    <!-- Step 1: Verify Details -->
     <div id="details-section">
       <h2>Verify Your Details</h2>
       <p id="shop-details"></p>
       <p><strong>Are the above details correct?</strong></p>
       <p style="color:#555;">क्या यह जानकारी सही है?</p>
       <button class="btn" id="confirm-btn">Yes, I Confirm</button>
+      <button class="btn btn-secondary" id="deny-btn">No, Correct Details</button>
     </div>
 
+    <!-- Correction Form -->
+    <div id="correction-section" class="hidden">
+      <h2>Enter Correct Details</h2>
+      <p>Please fill in the correct Shop Name and Market Name:</p>
+      <input type="text" id="correct-shopname" placeholder="Shop Name">
+      <input type="text" id="correct-marketname" placeholder="Market Name">
+      <button class="btn" id="submit-correction">Submit Correct Details</button>
+    </div>
+
+    <!-- Step 2: Password -->
     <div id="confirmation-section" class="hidden">
-      <h2>Step 2: Here is your Password</h2>
+      <h2>Your Password</h2>
       <p id="confirmation-msg"></p>
       <div class="password-box">
-        Password: <span id="shop-id"></span>
+        Your Password: <span id="shop-id"></span>
       </div>
       <p>Please copy this password and paste it into the <em>"Nickname"</em> field on the next page.</p>
-      <p>कृपया इस पासवर्ड को कॉपी करें और आगे जाकर <em>"Nickname"</em> वाले बक्से में भर दें।</p>
+      <p><strong>ज़़रूरी सूचना:</strong> कृपया इस पासवर्ड को कॉपी करें और आगे जाकर <em>"Nickname"</em> वाले बक्से में भर दें।</p>
       <button class="btn" id="go-to-links-btn">Proceed to Training</button>
     </div>
 
+    <!-- Step 3: Training Links -->
     <div id="final-section" class="hidden">
-      <h2>Step 3: Choose Your Training</h2>
+      <h2>Choose Your Training</h2>
       <div class="card">
-        <p><strong>Owner/Manager Training</strong></p>
+        <p><strong>Owner / Manager Training</strong></p>
         <button class="btn" id="btn-employer">Start Employer Training</button>
       </div>
       <div class="card">
@@ -138,47 +143,36 @@
   </div>
 
   <script>
+    // Sample shop data
     const shopData = [
-      { shopid: 101, shopname: "FABINDIA", marketname: "KHAN MARKET" },
-      { shopid: 102, shopname: "BLUE TOKAI", marketname: "RAJOURI GARDEN" },
-      { shopid: 103, shopname: "SHOPPE", marketname: "HAUZ KHAS VILLAGE" },
-      { shopid: 104, shopname: "NAPPA DORI", marketname: "VASANT VIHAR" },
-      { shopid: 105, shopname: "HALDIRAMS", marketname: "NEW FRIENDS COLONY" }
+      { shopid: 17324, shopname: "fabindia", marketname: "khan market" },
+      { shopid: 15647, shopname: "nicobar", marketname: "vasant vihar" },
+      { shopid: 76845, shopname: "eleved", marketname: "malcha marg" },
+      { shopid: 88974, shopname: "nappa dori", marketname: "vasabt vihar" },
+      { shopid: 44346, shopname: "evergreen", marketname: "julena" }
     ];
-
-    // Your Google Apps Script Web App URL
-    const SHEET_URL = "https://script.google.com/macros/s/AKfycbwE1pMUQ61CwBDXCA_q98YUm_34Uy9oNJQ8I_XBO4VAtUNAuB2EJOZ62h3UPVRs_hfHKw/exec";
-    // Logging helper
-    function trackUserDetails(shopid, shopname, marketname, role) {
-      fetch(SHEET_URL, {
-        method: "POST",
-        mode: "no-cors", // 👈 disables preflight & bypasses CORS
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          shopid, shopname, marketname, role,
-          timestamp: new Date().toISOString()
-        })
-      });
-      console.log("Logging:", shopid, shopname, marketname, role);
-    }
 
     const params = new URLSearchParams(window.location.search);
     const shopIdFromUrl = parseInt(params.get("shopid"));
+
     const shopDetails = document.getElementById("shop-details");
     const confirmationMsg = document.getElementById("confirmation-msg");
     const shopIdElement = document.getElementById("shop-id");
 
     const detailsSection = document.getElementById("details-section");
+    const correctionSection = document.getElementById("correction-section");
     const confirmationSection = document.getElementById("confirmation-section");
     const finalSection = document.getElementById("final-section");
 
-    const shop = shopData.find(shop => shop.shopid === shopIdFromUrl);
+    let shop = shopData.find(shop => shop.shopid === shopIdFromUrl);
+
     if (shop) {
       shopDetails.innerText = `Shop: ${shop.shopname} | Market: ${shop.marketname}`;
     } else {
       shopDetails.innerText = "⚠️ Shop not found!";
     }
 
+    // Yes button
     document.getElementById("confirm-btn").onclick = () => {
       confirmationMsg.innerText = `Confirmed: ${shop.shopname}, ${shop.marketname}`;
       shopIdElement.innerText = shop.shopid;
@@ -186,26 +180,49 @@
       confirmationSection.classList.remove("hidden");
     };
 
+    // No button
+    document.getElementById("deny-btn").onclick = () => {
+      detailsSection.classList.add("hidden");
+      correctionSection.classList.remove("hidden");
+    };
+
+    // Submit corrected details
+    document.getElementById("submit-correction").onclick = () => {
+      const newShopName = document.getElementById("correct-shopname").value.trim();
+      const newMarketName = document.getElementById("correct-marketname").value.trim();
+
+      if (!newShopName || !newMarketName) {
+        alert("Please fill both fields!");
+        return;
+      }
+
+      // Update shop object
+      shop = { shopid: shopIdFromUrl, shopname: newShopName, marketname: newMarketName };
+
+      confirmationMsg.innerText = `Corrected: ${shop.shopname}, ${shop.marketname}`;
+      shopIdElement.innerText = shop.shopid;
+
+      correctionSection.classList.add("hidden");
+      confirmationSection.classList.remove("hidden");
+    };
+
+    // Proceed button
     document.getElementById("go-to-links-btn").onclick = () => {
       confirmationSection.classList.add("hidden");
       finalSection.classList.remove("hidden");
       window.scrollTo(0, document.body.scrollHeight);
     };
 
+    // AdPuzzle Links
     const classroom1Link = "https://edpuzzle.com/assignments/68b1a7f9ddde8cb5f8362210/watch";
     const classroom2Link = "https://edpuzzle.com/assignments/68b1a7f9ddde8cb5f8362210/watch";
 
     document.getElementById("btn-employer").onclick = () => {
-      trackUserDetails(shop.shopid, shop.shopname, shop.marketname, "Employer");
       window.location.href = classroom1Link;
     };
     document.getElementById("btn-employee").onclick = () => {
-      trackUserDetails(shop.shopid, shop.shopname, shop.marketname, "Employee");
       window.location.href = classroom2Link;
     };
   </script>
 </body>
 </html>
-
-
-
