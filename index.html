@@ -146,14 +146,14 @@
       { shopid: 44346, shopname: "evergreen", marketname: "julena" }
     ];
 
-    // Replace with your Google Apps Script Web App URL
+    // Your Google Apps Script Web App URL
     const SHEET_URL = "https://script.google.com/macros/s/AKfycbx4daJTOhTxC7XaUhWR93Y1dVHI1LeUM7z1lf2EQ6S-I7_i97pPy4jK978_YG8E789B/exec";
 
-    // Helper function: log to Google Sheets
+    // Logging helper
     function trackUserDetails(shopid, shopname, marketname, role) {
       fetch(SHEET_URL, {
         method: "POST",
-        mode: "no-cors", // bypass CORS
+        mode: "no-cors", // 👈 disables preflight & bypasses CORS
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           shopid, shopname, marketname, role,
