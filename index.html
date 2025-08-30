@@ -186,21 +186,22 @@
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          shopid, shopname, marketname, role,
+          role, shopid, shopname, marketname, 
           timestamp: new Date().toISOString()
         })
       });
     }
 
     document.getElementById("btn-employer").onclick = () => {
-      trackUserDetails(shop.shopid, shop.shopname, shop.marketname, "Employer");
+      trackUserDetails("Employer", shop.shopid, shop.shopname, shop.marketname);
       window.location.href = classroom1Link;
     };
 
     document.getElementById("btn-employee").onclick = () => {
-      trackUserDetails(shop.shopid, shop.shopname, shop.marketname, "Employee");
+      trackUserDetails("Employee", shop.shopid, shop.shopname, shop.marketname);
       window.location.href = classroom2Link;
     };
   </script>
 </body>
 </html>
+
