@@ -181,7 +181,7 @@
     const classroom2Link = "https://edpuzzle.com/assignments/68b1a7f9ddde8cb5f8362210/watch";
 
     // Function to track user details to Google Sheets
-    function trackUserDetails(shopid, shopname, marketname, role) {
+    function trackUserDetails(role, shopid, shopname, marketname) {
       fetch("https://script.google.com/macros/s/AKfycbzLRysg-pKYgjJa30M51M0JfXrsGThOU1g4T709yAb8a9ilrSgZqEsrvGLers9dUF8w/exec", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -204,4 +204,5 @@
   </script>
 </body>
 </html>
+
 
