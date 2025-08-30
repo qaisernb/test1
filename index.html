@@ -38,14 +38,17 @@
   <div id="details-section">
     <p id="shop-details"></p>
     <p> Are the above details correct? </p>
+    <p> क्या यह जानकारी सही है </p>
     <button id="confirm-btn">Yes, they are correct</button>
   </div>
 
   <div id="confirmation-section" style="display: none;">
     <p id="confirmation-msg"></p>
-    <p>Your Password is <span id="shop-id"></span></p>
+    <p>Your PASSWORD is: <span id="shop-id"></span></p>
+    <p>आपका पासवर्ड है: <span id="shop-id"></span></p>
     
-     <p> Please copy this password and paste it into the "Nickname" field on the next page </p>
+     <p> Important Message: Please copy this password and paste it into the "Nickname" field on the next page </p>
+     <p> ज़रूरी सूचना: कृपया करके इस पासवर्ड को कॉपी करें और आगे जाकर "Nickname" वाले बक्से में भर दें </p>
     
     <button id="go-to-links-btn">Proceed to the Training Links</button>
   </div>
@@ -79,7 +82,7 @@
     // Find the shop details based on the shopid in the URL
     const shop = shopData.find(shop => shop.shopid === shopIdFromUrl);
     if (shop) {
-      shopDetails.innerText = `Shop: ${shop.shopname} | Market: ${shop.marketname}`;
+      shopDetails.innerText = `Name of Shop: ${shop.shopname} | Market Name: ${shop.marketname}`;
       detailsSection.style.display = "block";
     } else {
       userInfo.innerText = "Shop not found!";
@@ -131,5 +134,6 @@
   </script>
 </body>
 </html>
+
 
 
