@@ -34,6 +34,7 @@
 </head>
 <body>
   <h1>WELCOME TO THE POSH TRAINING</h1>
+  <p id="user-info">Loading...</p>
 
   <div id="details-section">
     <p id="shop-details"></p>
@@ -42,8 +43,7 @@
 
   <div id="confirmation-section" style="display: none;">
     <p id="confirmation-msg"></p>
-    <p Your Password is: <span id="shop-id"></span></p>
-    <p>Please copy this password and paste it into the "Nickname" field on the next page</p>
+    <p>Your Shop ID (Password): <span id="shop-id"></span></p>
     <button id="go-to-links-btn">Proceed to the Training Links</button>
   </div>
 
@@ -85,10 +85,10 @@
     // Handle confirmation button click
     document.getElementById("confirm-btn").onclick = () => {
       // Generate a Shop ID (password) from the shopid
-      const shopId = `${shop.shopid}`;
+      const shopId = `SHOP-${shop.shopid}`;
 
       // Display confirmation message
-      confirmationMsg.innerText = `This training is for Shop: ${shop.shopname} | Market: ${shop.marketname}.;
+      confirmationMsg.innerText = `You entered: Shop: ${shop.shopname} | Market: ${shop.marketname}. Is this correct?`;
       shopIdElement.innerText = shopId;
 
       detailsSection.style.display = "none";
@@ -128,4 +128,3 @@
   </script>
 </body>
 </html>
-
