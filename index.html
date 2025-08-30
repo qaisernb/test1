@@ -36,81 +36,93 @@
   <h1>WELCOME TO THE POSH TRAINING</h1>
   <p id="user-info">Loading...</p>
 
-  <div id="form-section">
-    <input type="text" id="shop-name" placeholder="Enter Shop Name" required>
-    <input type="text" id="market-name" placeholder="Enter Market Name" required>
-    <button id="submit-btn">Submit</button>
+  <div id="details-section">
+    <p id="shop-details"></p>
+    <button id="confirm-btn">Yes, this is correct</button>
   </div>
 
-  <div id="links-section" style="display: none;">
-    <p id="shop-details"></p>
-    <button id="btn1">Employer Training</button>
-    <button id="btn2">Employee Training</button>
+  <div id="confirmation-section" style="display: none;">
+    <p id="confirmation-msg"></p>
+    <p>Your Shop ID (Password): <span id="shop-id"></span></p>
+    <button id="go-to-links-btn">Proceed to the Training Links</button>
+  </div>
+
+  <div id="final-section" style="display: none;">
+    <button id="btn-employer">Go to Employer Training</button>
+    <button id="btn-employee">Go to Employee Training</button>
   </div>
 
   <script>
+    // Simulated data from your uploaded Excel (Shop ID, Shop Name, Market Name)
+    const shopData = [
+      { shopid: 17324, shopname: "fabindia", marketname: "khan market" },
+      { shopid: 15647, shopname: "nicobar", marketname: "vasant vihar" },
+      { shopid: 76845, shopname: "eleved", marketname: "malcha marg" },
+      { shopid: 88974, shopname: "nappa dori", marketname: "vasabt vihar" },
+      { shopid: 44346, shopname: "evergreen", marketname: "julena" }
+    ];
+
+    // Get shopid from the URL
     const params = new URLSearchParams(window.location.search);
-    const userCode = params.get("code"); // Get the personalized code from the URL
+    const shopIdFromUrl = parseInt(params.get("shopid")); // Get the shopid from the URL
     const userInfo = document.getElementById("user-info");
     const shopDetails = document.getElementById("shop-details");
-    const formSection = document.getElementById("form-section");
-    const linksSection = document.getElementById("links-section");
+    const confirmationMsg = document.getElementById("confirmation-msg");
+    const shopIdElement = document.getElementById("shop-id");
+    const detailsSection = document.getElementById("details-section");
+    const confirmationSection = document.getElementById("confirmation-section");
+    const finalSection = document.getElementById("final-section");
 
-    // Show personalized info based on URL code
-    if (userCode) {
-      userInfo.innerText = `Welcome, User Code: ${userCode}`;
+    // Find the shop details based on the shopid in the URL
+    const shop = shopData.find(shop => shop.shopid === shopIdFromUrl);
+    if (shop) {
+      shopDetails.innerText = `Shop: ${shop.shopname} | Market: ${shop.marketname}`;
+      detailsSection.style.display = "block";
     } else {
-      userInfo.innerText = "Invalid or missing user code!";
+      userInfo.innerText = "Shop not found!";
     }
 
-    // Handle form submission
-    document.getElementById("submit-btn").onclick = () => {
-      const shopName = document.getElementById("shop-name").value;
-      const marketName = document.getElementById("market-name").value;
+    // Handle confirmation button click
+    document.getElementById("confirm-btn").onclick = () => {
+      // Generate a Shop ID (password) from the shopid
+      const shopId = `SHOP-${shop.shopid}`;
 
-      if (shopName && marketName) {
-        // Store these details in localStorage or send to backend for tracking
-        localStorage.setItem("shopName", shopName);
-        localStorage.setItem("marketName", marketName);
+      // Display confirmation message
+      confirmationMsg.innerText = `You entered: Shop: ${shop.shopname} | Market: ${shop.marketname}. Is this correct?`;
+      shopIdElement.innerText = shopId;
 
-        // Display the entered details and show the buttons
-        shopDetails.innerHTML = `Shop: ${shopName} | Market: ${marketName}`;
-        formSection.style.display = "none";
-        linksSection.style.display = "block";
-
-        // Track the details
-        trackUserDetails(userCode, shopName, marketName);
-      } else {
-        alert("Please fill in both fields.");
-      }
+      detailsSection.style.display = "none";
+      confirmationSection.style.display = "block";
     };
 
-    // Redirect to AdPuzzle classroom with the shop and market info in the URL
+    // Scroll to final section and show AdPuzzle links
+    document.getElementById("go-to-links-btn").onclick = () => {
+      finalSection.style.display = "block";
+      window.scrollTo(0, document.body.scrollHeight); // Scroll to the final buttons section
+    };
+
+    // Handle button clicks (redirect to AdPuzzle classrooms)
     const classroom1Link = "https://edpuzzle.com/assignments/68b1a7f9ddde8cb5f8362210/watch";
-    const classroom2Link = "https://edpuzzle.com/assignments/68b1a7f9ddde8cb5f8362210/watch";
+    const classroom2Link = "https://edpuzzle.com/assignments/68b1a7f9ddde8cb5f8362210/watch"; // Update this link
 
-    document.getElementById("btn1").onclick = () => {
-      const shopName = localStorage.getItem("shopName");
-      const marketName = localStorage.getItem("marketName");
-      let url = `${classroom1Link}?code=${userCode}&shop=${shopName}&market=${marketName}`;
-      window.location.href = url;
+    document.getElementById("btn-employer").onclick = () => {
+      window.location.href = `${classroom1Link}?shop=${shop.shopname}&market=${shop.marketname}&shopid=${shop.shopid}`;
+      trackUserDetails(shop.shopname, shop.marketname, "Employer");
     };
 
-    document.getElementById("btn2").onclick = () => {
-      const shopName = localStorage.getItem("shopName");
-      const marketName = localStorage.getItem("marketName");
-      let url = `${classroom2Link}?code=${userCode}&shop=${shopName}&market=${marketName}`;
-      window.location.href = url;
+    document.getElementById("btn-employee").onclick = () => {
+      window.location.href = `${classroom2Link}?shop=${shop.shopname}&market=${shop.marketname}&shopid=${shop.shopid}`;
+      trackUserDetails(shop.shopname, shop.marketname, "Employee");
     };
 
     // Track user details (send to backend)
-    function trackUserDetails(code, shopName, marketName) {
+    function trackUserDetails(shopName, marketName, role) {
       fetch("https://your-backend-url.com/track", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
         },
-        body: JSON.stringify({ code, shopName, marketName, timestamp: new Date().toISOString() })
+        body: JSON.stringify({ shopName, marketName, role, timestamp: new Date().toISOString() })
       });
     }
   </script>
