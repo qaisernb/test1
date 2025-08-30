@@ -5,60 +5,104 @@
   <title>WELCOME TO THE POSH TRAINING</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
       text-align: center;
-      margin-top: 100px;
-      background: #f9f9f9;
+      margin: 0;
+      background: linear-gradient(135deg, #e3f2fd, #fce4ec);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 30px;
+    }
+    .container {
+      background: #fff;
+      border-radius: 16px;
+      padding: 40px;
+      max-width: 700px;
+      width: 100%;
+      box-shadow: 0px 6px 20px rgba(0, 0, 0, 0.1);
+      animation: fadeIn 1s ease-in;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
     }
     h1 {
-      margin-bottom: 40px;
+      margin-bottom: 20px;
+      color: #007BFF;
     }
-    input, button {
-      padding: 15px 30px;
+    p {
       font-size: 18px;
-      margin: 10px;
-      width: 300px;
-      border-radius: 8px;
+      margin: 10px 0;
+    }
+    .highlight {
+      font-weight: bold;
+      color: #d32f2f;
+    }
+    .password-box {
+      margin: 20px auto;
+      padding: 15px;
+      font-size: 20px;
+      background: #f1f8e9;
+      border: 2px dashed #388e3c;
+      border-radius: 10px;
+      width: fit-content;
+      font-weight: bold;
+      color: #2e7d32;
     }
     button {
-      background: #007BFF;
+      padding: 15px 30px;
+      font-size: 18px;
+      margin: 15px;
+      width: 80%;
+      max-width: 350px;
+      border-radius: 50px;
+      background: linear-gradient(135deg, #007BFF, #00c6ff);
       color: white;
       border: none;
       cursor: pointer;
-      transition: 0.3s;
+      transition: all 0.3s ease;
     }
     button:hover {
-      background: #0056b3;
+      transform: scale(1.05);
+      background: linear-gradient(135deg, #0056b3, #0099cc);
+    }
+    .hidden {
+      display: none;
     }
   </style>
 </head>
 <body>
-  <h1>WELCOME TO THE POSH TRAINING</h1>
+  <div class="container">
+    <h1>WELCOME TO THE POSH TRAINING</h1>
 
-  <div id="details-section">
-    <p id="shop-details"></p>
-    <p> Are the above details correct? </p>
-    <p> क्या यह जानकारी सही है? </p>
-    <button id="confirm-btn">Yes, they are correct</button>
-  </div>
+    <div id="details-section">
+      <p id="shop-details"></p>
+      <p><span class="highlight">Are the above details correct?</span></p>
+      <p>क्या यह जानकारी सही है?</p>
+      <button id="confirm-btn">✅ Yes, they are correct</button>
+    </div>
 
-  <div id="confirmation-section" style="display: none;">
-    <p id="confirmation-msg"></p>
-    <p>Your PASSWORD is: <span id="shop-id"></span></p>
-    
-     <p> Important Message: Please copy this password and paste it into the "Nickname" field on the next page </p>
-     <p> ज़रूरी सूचना: कृपया करके इस पासवर्ड को कॉपी करें और आगे जाकर "Nickname" वाले बक्से में भर दें </p>
-    
-    <button id="go-to-links-btn">Proceed to the Training Links</button>
-  </div>
+    <div id="confirmation-section" class="hidden">
+      <p id="confirmation-msg"></p>
+      <div class="password-box">
+        Your PASSWORD is: <span id="shop-id"></span>
+      </div>
+      <p><strong>Important:</strong> Copy this password and paste it into the <em>"Nickname"</em> field on the next page.</p>
+      <p><strong>ज़रूरी सूचना:</strong> कृपया इस पासवर्ड को कॉपी करें और आगे जाकर <em>"Nickname"</em> वाले बक्से में भर दें।</p>
+      <button id="go-to-links-btn">🚀 Proceed to Training Links</button>
+    </div>
 
-  <div id="final-section" style="display: none;">
-    <button id="btn-employer">I am the Owner/Manager</button>
-    <button id="btn-employee">I am the employee</button>
+    <div id="final-section" class="hidden">
+      <p><strong>Select your role:</strong></p>
+      <button id="btn-employer">👔 I am the Owner/Manager</button>
+      <button id="btn-employee">👷 I am the Employee</button>
+    </div>
   </div>
 
   <script>
-    // Simulated data from your uploaded Excel (Shop ID, Shop Name, Market Name)
+    // Simulated shop data
     const shopData = [
       { shopid: 17324, shopname: "fabindia", marketname: "khan market" },
       { shopid: 15647, shopname: "nicobar", marketname: "vasant vihar" },
@@ -67,73 +111,47 @@
       { shopid: 44346, shopname: "evergreen", marketname: "julena" }
     ];
 
-    // Get shopid from the URL
+    // Get shopid from URL
     const params = new URLSearchParams(window.location.search);
-    const shopIdFromUrl = parseInt(params.get("shopid")); // Get the shopid from the URL
-    const userInfo = document.getElementById("user-info");
+    const shopIdFromUrl = parseInt(params.get("shopid"));
     const shopDetails = document.getElementById("shop-details");
     const confirmationMsg = document.getElementById("confirmation-msg");
     const shopIdElement = document.getElementById("shop-id");
+
     const detailsSection = document.getElementById("details-section");
     const confirmationSection = document.getElementById("confirmation-section");
     const finalSection = document.getElementById("final-section");
 
-    // Find the shop details based on the shopid in the URL
     const shop = shopData.find(shop => shop.shopid === shopIdFromUrl);
     if (shop) {
-      shopDetails.innerText = `Name of Shop: ${shop.shopname} | Market Name: ${shop.marketname}`;
-      detailsSection.style.display = "block";
+      shopDetails.innerText = `Shop: ${shop.shopname} | Market: ${shop.marketname}`;
     } else {
-      userInfo.innerText = "Shop not found!";
+      shopDetails.innerText = "⚠️ Shop not found!";
     }
 
-    // Handle confirmation button click
     document.getElementById("confirm-btn").onclick = () => {
-      // Generate a Shop ID (password) from the shopid
-      const shopId = `${shop.shopid}`;
-
-      // Display confirmation message
-      confirmationMsg.innerText = `Your Shop is: ${shop.shopname} | Market: ${shop.marketname}`;
-      shopIdElement.innerText = shopId;
-
-      detailsSection.style.display = "none";
-      confirmationSection.style.display = "block";
+      confirmationMsg.innerText = `✔️ Confirmed: ${shop.shopname}, ${shop.marketname}`;
+      shopIdElement.innerText = shop.shopid;
+      detailsSection.classList.add("hidden");
+      confirmationSection.classList.remove("hidden");
     };
 
-    // Scroll to final section and show AdPuzzle links
     document.getElementById("go-to-links-btn").onclick = () => {
-      finalSection.style.display = "block";
-      window.scrollTo(0, document.body.scrollHeight); // Scroll to the final buttons section
+      confirmationSection.classList.add("hidden");
+      finalSection.classList.remove("hidden");
+      window.scrollTo(0, document.body.scrollHeight);
     };
 
-    // Handle button clicks (redirect to AdPuzzle classrooms)
+    // AdPuzzle links
     const classroom1Link = "https://edpuzzle.com/assignments/68b1a7f9ddde8cb5f8362210/watch";
-    const classroom2Link = "https://edpuzzle.com/assignments/68b1a7f9ddde8cb5f8362210/watch"; // Update this link
+    const classroom2Link = "https://edpuzzle.com/assignments/68b1a7f9ddde8cb5f8362210/watch";
 
     document.getElementById("btn-employer").onclick = () => {
-      window.location.href = `${classroom1Link}?shop=${shop.shopname}&market=${shop.marketname}&shopid=${shop.shopid}`;
-      trackUserDetails(shop.shopname, shop.marketname, "Employer");
+      window.location.href = classroom1Link;
     };
-
     document.getElementById("btn-employee").onclick = () => {
-      window.location.href = `${classroom2Link}?shop=${shop.shopname}&market=${shop.marketname}&shopid=${shop.shopid}`;
-      trackUserDetails(shop.shopname, shop.marketname, "Employee");
+      window.location.href = classroom2Link;
     };
-
-    // Track user details (send to backend)
-    function trackUserDetails(shopName, marketName, role) {
-      fetch("https://your-backend-url.com/track", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({ shopName, marketName, role, timestamp: new Date().toISOString() })
-      });
-    }
   </script>
 </body>
 </html>
-
-
-
-
