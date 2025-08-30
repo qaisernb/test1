@@ -34,16 +34,16 @@
 </head>
 <body>
   <h1>WELCOME TO THE POSH TRAINING</h1>
-  <p id="user-info">Loading...</p>
 
   <div id="details-section">
     <p id="shop-details"></p>
-    <button id="confirm-btn">Yes, this is correct</button>
+    <p> Are the above details correct</p>
+    <button id="confirm-btn">Yes, they are correct</button>
   </div>
 
   <div id="confirmation-section" style="display: none;">
     <p id="confirmation-msg"></p>
-    <p>Your Shop ID (Password): <span id="shop-id"></span></p>
+    <p>Your Password is <span id="shop-id"></span></p>
     <button id="go-to-links-btn">Proceed to the Training Links</button>
   </div>
 
@@ -85,10 +85,10 @@
     // Handle confirmation button click
     document.getElementById("confirm-btn").onclick = () => {
       // Generate a Shop ID (password) from the shopid
-      const shopId = `SHOP-${shop.shopid}`;
+      const shopId = `${shop.shopid}`;
 
       // Display confirmation message
-      confirmationMsg.innerText = `You entered: Shop: ${shop.shopname} | Market: ${shop.marketname}. Is this correct?`;
+      confirmationMsg.innerText = `Your Shop is: ${shop.shopname} | Market: ${shop.marketname}`;
       shopIdElement.innerText = shopId;
 
       detailsSection.style.display = "none";
@@ -128,3 +128,4 @@
   </script>
 </body>
 </html>
+
