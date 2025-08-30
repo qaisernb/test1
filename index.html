@@ -1,147 +1,118 @@
-<!DOCTYPE HTML>
-<!--
-	Astral by HTML5 UP
-	html5up.net | @ajlkn
-	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
--->
-<html>
-	<head>
-		<title>Astral by HTML5 UP</title>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-		<link rel="stylesheet" href="assets/css/main.css" />
-		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
-	</head>
-	<body class="is-preload">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>WELCOME TO THE POSH TRAINING</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin-top: 100px;
+      background: #f9f9f9;
+    }
+    h1 {
+      margin-bottom: 40px;
+    }
+    input, button {
+      padding: 15px 30px;
+      font-size: 18px;
+      margin: 10px;
+      width: 300px;
+      border-radius: 8px;
+    }
+    button {
+      background: #007BFF;
+      color: white;
+      border: none;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    button:hover {
+      background: #0056b3;
+    }
+  </style>
+</head>
+<body>
+  <h1>WELCOME TO THE POSH TRAINING</h1>
+  <p id="user-info">Loading...</p>
 
-		<!-- Wrapper-->
-			<div id="wrapper">
+  <div id="form-section">
+    <input type="text" id="shop-name" placeholder="Enter Shop Name" required>
+    <input type="text" id="market-name" placeholder="Enter Market Name" required>
+    <button id="submit-btn">Submit</button>
+  </div>
 
-				<!-- Nav -->
-					<nav id="nav">
-						<a href="#" class="icon solid fa-home"><span>Home</span></a>
-						<a href="#work" class="icon solid fa-folder"><span>Work</span></a>
-						<a href="#contact" class="icon solid fa-envelope"><span>Contact</span></a>
-						<a href="https://twitter.com/ajlkn" class="icon brands fa-twitter"><span>Twitter</span></a>
-					</nav>
+  <div id="links-section" style="display: none;">
+    <p id="shop-details"></p>
+    <button id="btn1">Employer Training</button>
+    <button id="btn2">Employee Training</button>
+  </div>
 
-				<!-- Main -->
-					<div id="main">
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const userCode = params.get("code"); // Get the personalized code from the URL
+    const userInfo = document.getElementById("user-info");
+    const shopDetails = document.getElementById("shop-details");
+    const formSection = document.getElementById("form-section");
+    const linksSection = document.getElementById("links-section");
 
-						<!-- Me -->
-							<article id="home" class="panel intro">
-								<header>
-									<h1>Urban Retail</h1>
-									<p>POSH Training</p>
-								</header>
-								<a href="#work" class="jumplink pic">
-									<span class="arrow icon solid fa-chevron-right"><span>See my work</span></span>
-									<img src="images/me.jpg" alt="" />
-								</a>
-							</article>
+    // Show personalized info based on URL code
+    if (userCode) {
+      userInfo.innerText = `Welcome, User Code: ${userCode}`;
+    } else {
+      userInfo.innerText = "Invalid or missing user code!";
+    }
 
-						<!-- Work -->
-							<article id="work" class="panel">
-								<header>
-									<h2>Work</h2>
-								</header>
-								<p>
-									What this POSH Training Covers:
-									What counts as sexual harassment
-									How to respect boundaries at work
-									What to do if someone faces or sees harassment
-									How to file a complaint
-									What the Internal Committee (IC/ICC) does
-									Role of employers in creating a safe workplace
-								</p>
-								<section>
-									<div class="row">
-										<div class="col-4 col-6-medium col-12-small">
-											<a href="#" class="image fit"><img src="images/pic01.jpg" alt=""></a>
-										</div>
-										<div class="col-4 col-6-medium col-12-small">
-											<a href="#" class="image fit"><img src="images/pic02.jpg" alt=""></a>
-										</div>
-										<div class="col-4 col-6-medium col-12-small">
-											<a href="#" class="image fit"><img src="images/pic03.jpg" alt=""></a>
-										</div>
-										<div class="col-4 col-6-medium col-12-small">
-											<a href="#" class="image fit"><img src="images/pic04.jpg" alt=""></a>
-										</div>
-										<div class="col-4 col-6-medium col-12-small">
-											<a href="#" class="image fit"><img src="images/pic05.jpg" alt=""></a>
-										</div>
-										<div class="col-4 col-6-medium col-12-small">
-											<a href="#" class="image fit"><img src="images/pic06.jpg" alt=""></a>
-										</div>
-										<div class="col-4 col-6-medium col-12-small">
-											<a href="#" class="image fit"><img src="images/pic07.jpg" alt=""></a>
-										</div>
-										<div class="col-4 col-6-medium col-12-small">
-											<a href="#" class="image fit"><img src="images/pic08.jpg" alt=""></a>
-										</div>
-										<div class="col-4 col-6-medium col-12-small">
-											<a href="#" class="image fit"><img src="images/pic09.jpg" alt=""></a>
-										</div>
-										<div class="col-4 col-6-medium col-12-small">
-											<a href="#" class="image fit"><img src="images/pic10.jpg" alt=""></a>
-										</div>
-										<div class="col-4 col-6-medium col-12-small">
-											<a href="#" class="image fit"><img src="images/pic11.jpg" alt=""></a>
-										</div>
-										<div class="col-4 col-6-medium col-12-small">
-											<a href="#" class="image fit"><img src="images/pic12.jpg" alt=""></a>
-										</div>
-									</div>
-								</section>
-							</article>
+    // Handle form submission
+    document.getElementById("submit-btn").onclick = () => {
+      const shopName = document.getElementById("shop-name").value;
+      const marketName = document.getElementById("market-name").value;
 
-						<!-- Contact -->
-							<article id="contact" class="panel">
-								<header>
-									<h2>Contact Me</h2>
-								</header>
-								<form action="#" method="post">
-									<div>
-										<div class="row">
-											<div class="col-6 col-12-medium">
-												<input type="text" name="name" placeholder="Name" />
-											</div>
-											<div class="col-6 col-12-medium">
-												<input type="text" name="email" placeholder="Email" />
-											</div>
-											<div class="col-12">
-												<input type="text" name="subject" placeholder="Subject" />
-											</div>
-											<div class="col-12">
-												<textarea name="message" placeholder="Message" rows="6"></textarea>
-											</div>
-											<div class="col-12">
-												<input type="submit" value="Send Message" />
-											</div>
-										</div>
-									</div>
-								</form>
-							</article>
+      if (shopName && marketName) {
+        // Store these details in localStorage or send to backend for tracking
+        localStorage.setItem("shopName", shopName);
+        localStorage.setItem("marketName", marketName);
 
-					</div>
+        // Display the entered details and show the buttons
+        shopDetails.innerHTML = `Shop: ${shopName} | Market: ${marketName}`;
+        formSection.style.display = "none";
+        linksSection.style.display = "block";
 
-				<!-- Footer -->
-					<div id="footer">
-						<ul class="copyright">
-							<li>&copy; Untitled.</li><li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
-						</ul>
-					</div>
+        // Track the details
+        trackUserDetails(userCode, shopName, marketName);
+      } else {
+        alert("Please fill in both fields.");
+      }
+    };
 
-			</div>
+    // Redirect to AdPuzzle classroom with the shop and market info in the URL
+    const classroom1Link = "https://edpuzzle.com/assignments/68b1a7f9ddde8cb5f8362210/watch";
+    const classroom2Link = "https://edpuzzle.com/assignments/68b1a7f9ddde8cb5f8362210/watch";
 
-		<!-- Scripts -->
-			<script src="assets/js/jquery.min.js"></script>
-			<script src="assets/js/browser.min.js"></script>
-			<script src="assets/js/breakpoints.min.js"></script>
-			<script src="assets/js/util.js"></script>
-			<script src="assets/js/main.js"></script>
+    document.getElementById("btn1").onclick = () => {
+      const shopName = localStorage.getItem("shopName");
+      const marketName = localStorage.getItem("marketName");
+      let url = `${classroom1Link}?code=${userCode}&shop=${shopName}&market=${marketName}`;
+      window.location.href = url;
+    };
 
-	</body>
+    document.getElementById("btn2").onclick = () => {
+      const shopName = localStorage.getItem("shopName");
+      const marketName = localStorage.getItem("marketName");
+      let url = `${classroom2Link}?code=${userCode}&shop=${shopName}&market=${marketName}`;
+      window.location.href = url;
+    };
 
+    // Track user details (send to backend)
+    function trackUserDetails(code, shopName, marketName) {
+      fetch("https://your-backend-url.com/track", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ code, shopName, marketName, timestamp: new Date().toISOString() })
+      });
+    }
+  </script>
+</body>
 </html>
